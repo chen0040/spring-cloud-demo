@@ -1,0 +1,6 @@
+{
+  "/greetings": {
+    "target": "http://localhost:9020",
+    "secure": false
+  }
+}

@@ -1,0 +1,38 @@
+---
+- hosts: erp_systems
+  tags:
+    - install_slaves
+  tasks:
+  - name: Create install jars directory if not exists
+    file: path={{ app_remote_bin_dir }} state=directory
+  - name: Create logs directory if not exists
+    file: path={{ app_remote_logs_dir }} state=directory
+  - name: Create pids directory if not exists
+    file: path={{ app_remote_pids_dir }} state=directory
+  - name: copy jars
+    copy: src={{app_bin_dir}}/{{item}}.jar dest={{ app_remote_bin_dir }}/{{item}}.jar
+    with_items:
+      - spring-eureka-server
+      - spring-erp-scala
+      - spring-erp-buyer
+      - spring-erp-vendor
+      - spring-erp-admin
+
+- hosts: app_syslog_server
+  tags:
+    - install_slaves
+    - install_syslog_server
+  tasks:
+  - name: Create install jars directory if not exists
+    file: path={{ app_remote_bin_dir }} state=directory
+  - name: Create logs directory if not exists
+    file: path={{ app_remote_logs_dir }} state=directory
+  - name: Create pids directory if not exists
+    file: path={{ app_remote_pids_dir }} state=directory
+  - name: copy jars
+    copy: src={{app_bin_dir}}/{{item}}.jar dest={{ app_remote_bin_dir }}/{{item}}.jar
+    with_items:
+      - spring-erp-syslog4j-server
+
+
+

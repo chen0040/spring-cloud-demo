@@ -1,0 +1,80 @@
+---
+- hosts: app_buyer_servers
+  tags:
+    - stop_slaves
+  tasks:
+  - stat: path={{ app_remote_pids_dir }}/{{ app_buyer_server_pid }}
+    register: app_buyer_server_pid_status
+  - name: Stop buyer servers
+    shell: kill -9 `cat {{ app_remote_pids_dir }}/{{ app_buyer_server_pid }}` & sleep 5 & rm -rf {{ app_remote_pids_dir }}/{{ app_buyer_server_pid }}
+    when: app_buyer_server_pid_status.stat.exists == True
+  - name: Kill buyer servers absolutely
+    shell: kill -9 `ps aux | grep {{ app_buyer_server_jar }} | grep -v grep | awk 'NR==1{print $2}'`
+    ignore_errors: yes
+
+- hosts: app_vendor_servers
+  tags:
+    - stop_slaves
+  tasks:
+  - stat: path={{ app_remote_pids_dir }}/{{ app_vendor_server_pid }}
+    register: app_vendor_server_pid_status
+  - name: Stop vendor servers
+    shell: "kill -9 `cat {{ app_remote_pids_dir }}/{{ app_vendor_server_pid }}` & sleep 5 & rm -rf {{ app_remote_pids_dir }}/{{ app_vendor_server_pid }}"
+    when: app_vendor_server_pid_status.stat.exists == True
+  - name: Kill vendor servers absolutely
+    shell: kill -9 `ps aux | grep {{ app_vendor_server_jar }} | grep -v grep | awk 'NR==1{print $2}'`
+    ignore_errors: yes
+
+- hosts: app_admin_servers
+  remote_user: clef
+  tags:
+    - stop_slaves
+  tasks:
+  - stat: path={{ app_remote_pids_dir }}/{{ app_admin_server_pid }}
+    register: app_admin_server_pid_status
+  - name: Stop admin servers 
+    shell: "kill -9 `cat {{ app_remote_pids_dir }}/{{ app_admin_server_pid }}` & sleep 5 & rm -rf {{ app_remote_pids_dir }}/{{ app_admin_server_pid }}"
+    when: app_admin_server_pid_status.stat.exists == True
+  - name: Kill admin servers absolutely
+    shell: kill -9 `ps aux | grep {{ app_admin_server_jar }} | grep -v grep | awk 'NR==1{print $2}'`
+    ignore_errors: yes
+
+- hosts: app_erp_servers
+  tags:
+    - stop_slaves
+  tasks:
+  - stat: path={{ app_remote_pids_dir }}/{{ app_erp_server_pid }}
+    register: app_erp_server_pid_status
+  - name: Stop erp servers
+    shell: "kill -9 `cat {{ app_remote_pids_dir }}/{{ app_erp_server_pid }}` & sleep 5 & rm -rf {{ app_remote_pids_dir }}/{{ app_erp_server_pid }}"
+    when: app_erp_server_pid_status.stat.exists == True
+  - name: Kill erp servers absolutely
+    shell: kill -9 `ps aux | grep {{ app_erp_server_jar }} | grep -v grep | awk 'NR==1{print $2}'`
+    ignore_errors: yes
+
+- hosts: app_eureka_servers
+  tags:
+    - stop_slaves
+  tasks:
+  - stat: path={{ app_remote_pids_dir }}/{{ app_eureka_server_pid }}
+    register: app_eureka_server_pid_status
+  - name: Stop eureka servers
+    shell: "kill -9 `cat {{ app_remote_pids_dir }}/{{ app_eureka_server_pid }}` & sleep 5 & rm -rf {{ app_remote_pids_dir }}/{{ app_eureka_server_pid }}"
+    when: app_eureka_server_pid_status.stat.exists == True
+  - name: Kill eureka servers absolutely
+    shell: kill -9 `ps aux | grep {{ app_eureka_server_jar }} | grep -v grep | awk 'NR==1{print $2}'`
+    ignore_errors: yes
+    
+- hosts: app_syslog_server
+  tags:
+    - stop_slaves
+    - stop_syslog_server
+  tasks:
+  - stat: path={{ app_remote_pids_dir }}/{{ app_syslog_server_pid }}
+    register: app_syslog_server_pid_status
+  - name: Stop syslog server
+    shell: "kill -9 `cat {{ app_remote_pids_dir }}/{{ app_syslog_server_pid }}` & sleep 5 & rm -rf {{ app_remote_pids_dir }}/{{ app_syslog_server_pid }}"
+    when: app_syslog_server_pid_status.stat.exists == True
+  - name: Kill syslog server absolutely
+    shell: kill -9 `ps aux | grep {{ app_syslog_server_jar }} | grep -v grep | awk 'NR==1{print $2}'`
+    ignore_errors: yes

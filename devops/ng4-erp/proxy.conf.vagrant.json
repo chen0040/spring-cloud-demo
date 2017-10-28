@@ -1,0 +1,6 @@
+{
+  "/greetings": {
+    "target": "http://192.168.10.13:9020",
+    "secure": false
+  }
+}

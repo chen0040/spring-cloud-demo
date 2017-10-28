@@ -1,0 +1,46 @@
+---
+- hosts: app_eureka_servers
+  tags:
+    - start_slaves
+  tasks:
+  - name: Run eureka servers
+    shell: nohup java -Dspring.profiles.active={{ deployment_profile }} -jar {{ app_remote_bin_dir }}/{{ app_eureka_server_jar }} 1 > /dev/null 2 > /dev/null & echo $! > {{ app_remote_pids_dir }}/{{ app_eureka_server_pid }} & sleep 5
+
+- hosts: app_erp_servers
+  tags:
+    - start_slaves
+  tasks:
+  - name: Run erp servers 
+    shell: nohup java -Dspring.profiles.active={{ deployment_profile }} -jar {{ app_remote_bin_dir }}/{{ app_erp_server_jar }} -XX:+UseG1GC -Xms2048 -Xmx2048 1 > /dev/null 2 > /dev/null & echo $! > {{ app_remote_pids_dir }}/{{ app_erp_server_pid }} & sleep 5
+
+- hosts: app_buyer_servers
+  tags:
+    - start_slaves
+  tasks:
+  - name: Run buyer servers 
+    shell: nohup java -Dspring.profiles.active={{ deployment_profile }} -jar {{ app_remote_bin_dir }}/{{ app_buyer_server_jar }} 1 > /dev/null 2 > /dev/null & echo $! > {{ app_remote_pids_dir }}/{{ app_buyer_server_pid }} & sleep 5
+    
+- hosts: app_vendor_servers
+  tags:
+    - start_slaves
+  tasks:
+  - name: Run vendor servers
+    shell: nohup java -Dspring.profiles.active={{ deployment_profile }} -jar {{ app_remote_bin_dir }}/{{ app_vendor_server_jar }} -XX:+UseG1GC -Xms2048 -Xmx2048 1 > /dev/null 2 > /dev/null & echo $! > {{ app_remote_pids_dir }}/{{ app_vendor_server_pid }} & sleep 5
+
+- hosts: app_admin_servers
+  tags:
+    - start_slaves
+  tasks:
+  - name: Run admin servers
+    shell: nohup java -Dspring.profiles.active={{ deployment_profile }} -jar {{ app_remote_bin_dir }}/{{ app_admin_server_jar }} 1 > /dev/null 2 > /dev/null & echo $! > {{ app_remote_pids_dir }}/{{ app_admin_server_pid }} & sleep 5
+
+- hosts: app_syslog_server
+  tags:
+    - start_slaves
+    - start_syslog_server
+  tasks:
+  - name: Run syslog4j server
+    shell: nohup java -Dspring.profiles.active={{ deployment_profile }} -jar {{ app_remote_bin_dir }}/{{ app_syslog_server_jar }} 1 > /dev/null 2 > /dev/null & echo $! > {{ app_remote_pids_dir }}/{{ app_syslog_server_pid }} & sleep 5
+
+
+
